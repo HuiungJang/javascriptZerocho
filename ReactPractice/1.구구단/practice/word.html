@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-compatible" content="chrome=1,IE=edge">
+    <title>끝말잇기</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class Word extends React.Component{
+          input;
+
+         state={
+           word :'시작',
+           inputText:'',
+           result:'',
+          }
+        onChange=(e)=>{
+            this.setState({inputText:e.target.value,})
+        }
+       onSubmit=(e)=>{
+           // submit 기본 값 막아서 페이지 새로고침 막음
+           e.preventDefault();
+
+           // 입력받은 값을 쪼개서 배열에 넣음
+           let inputWord =this.state.inputText.split('');
+           // 제시어를 쪼개서 배열에 넣음
+           let startWord = this.state.word.split('');
+
+           if( inputWord[inputWord.length-1] === startWord[0]){
+             this.setState({result: '딩동댕'});
+             // word에 입력받은 값을 넣음
+             this.setState({
+               word:this.state.inputText,
+               inputText:'',
+             });
+             this.input.focus();
+           }else{
+             this.setState({
+               result: '땡',
+               inputText:'',
+             });
+             this.input.focus();
+           }
+       }
+        inputFocus=(e)=>{
+           this.input =e;
+        }
+
+          render(){
+           return(
+             <React.Fragment>
+               <div>{this.state.word}</div>
+               <form onSubmit={this.onSubmit}>
+                 <input ref={this.inputFocus} type="text" value={this.state.inputText} onChange={this.onChange}/>
+                 <button>입력</button>
+               </form>
+               <div>{this.state.result}</div>
+             </React.Fragment>
+           );
+          }
+
+        }
+    </script>
+    <script type="text/babel">
+        ReactDOM.render(<Word />,document.querySelector('#root'));
+    </script>
+</body>
+</html>
