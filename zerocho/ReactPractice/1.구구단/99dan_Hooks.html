@@ -19,12 +19,53 @@
       const [second,setSecond] =React.useState(Math.ceil(Math.random()*9));
       const [value,setValue]=React.useState('');
       const [result,setResult]=React.useState('');
+      const inputRef = React.useRef(null);
+      // ref 사용하려면 함수를 써야한다.
       // 컴포넌트 안에 state를 넣어야한다.
+      // 첫번째가 state 두번째가 setState
+      const onChangeInput =(e)=>{
+        setValue(e.target.value);
+      };
+      const onSubmitForm=(e)=>{
+        e.preventDefault();
+        if(parseInt(value)=== first * second){
+          // this.setState(()=>{
+          //   return{
+          //     result:'정답' + prevState.value,
+          //     first:Math.ceil(Math.random()*9),
+          //     second:Math.ceil(Math.random()*9),
+          //     value:'',
+          //   };
+          // });
+          // Hooks를 쓰면 이렇게 간단해진다.
+          setResult('정답'+ value );
+          setFirst(Math.ceil(Math.random()*9));
+          setSecond(Math.ceil(Math.random()*9));
+          setValue('');
+          inputRef.current.focus();
+        }else{
+          // this.setState({
+          //   result:'땡!!',
+          //   value:'',
+          // });
 
-      return <div>{first} {second} {value} {result}</div>;
+          setResult('땡');
+          setValue('');
+          inputRef.current.focus();
+        }
+      }
+
+
+      return( <React.Fragment>
+        <div>{first} 곱하기 {second}는?</div>
+        <form onSubmit={onSubmitForm}>
+          <input ref={inputRef} onChange={onChangeInput} value={value}/>
+          <button>입력!</button>
+        </form>
+        <div id ="result">{result}</div>
+      </React.Fragment>
+      );
     }
-
-    GuGuDan();
 
 </script>
 <script type="text/babel">
